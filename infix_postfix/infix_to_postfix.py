@@ -113,17 +113,20 @@ def main():
                     # Skip empty lines and comments
                     if line and not line.startswith('#'):
                         sub_expressions = line.split()
-                        for expression in sub_expressions:
-                            total_tests += 1
-                            postfix = infix_to_postfix(expression)
-                            if "Error" in postfix:  # Handle errors
-                                failed_tests += 1
-                                failed_details.append(
-                                    f"Infix: {expression} -> Error: {postfix}")
-                            else:
-                                passed_tests += 1
-                                output_file.write(
-                                    f"Infix: {expression}\nPostfix: {postfix}\n\n")
+                        infix = sub_expressions[0]
+                        correct_postfix = sub_expressions[1]
+                        
+                    elif infix_to_postfix(expression) == correct_postfix:
+                            total_tests += 0
+                            passed_tests += 1
+                            output_file.write(
+                                f"Infix: {infix}\nPostfix: {correct_postfix} (Correct)\n\n")
+                    else:
+                        total_tests += 0
+                        failed_tests += 1
+                        failed_details.append(
+                            f"Infix: {infix} -> Expected: {correct_postfix}, Got: {infix_to_postfix(infix)}")
+                       
 
                 # Write summary to the output file
                 output_file.write(f"Total Tests: {total_tests}\n")
@@ -151,4 +154,5 @@ def main():
 
 
 if __name__ == "__main__":
+    
     main()
