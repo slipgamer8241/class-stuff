@@ -1,23 +1,17 @@
 """
 Author: Marcus Sweet
-Date: 2025.03.31
+Date: 2025.04.30
 Description:
     This program processes a given text to calculate word frequencies, filter out stop words, 
-    and create a linked list of the words. It provides options to display all word frequencies, 
+    and store the word frequencies in a Python dictionary. It provides options to display all word frequencies, 
     find the word with the highest frequency, or search for the frequency of a specific word. 
     The text can be input manually or read from a file.
 """
 import sys
 import time
 
-class LinkedListNode:
-    """A node in a linked list that stores a word and a reference to the next node."""
-    def __init__(self, word):
-        self.word = word
-        self.next = None
-
 def preprocess_text(text):
-    """Preprocess the text by removing punctuation and converting to lowercase."""
+    """Preprocess the text by removing punctuation, numbers, and converting to lowercase."""
     cleaned_text = ''.join(char.lower() if char.isalpha() or char.isspace() else '' for char in text)
     return cleaned_text
 
@@ -28,7 +22,7 @@ def filter_stop_words(text, stop_words):
     return ' '.join(filtered_words)
 
 def calculate_word_frequencies(text):
-    """Calculate the frequency of each word in the text."""
+    """Calculate the frequency of each word and store it in a dictionary."""
     words = text.split()
     word_freq = {}
     for word in words:
@@ -37,20 +31,6 @@ def calculate_word_frequencies(text):
         else:
             word_freq[word] = 1
     return word_freq
-
-def create_linked_list(words):
-    """Create a linked list from a list of words."""
-    head = None
-    current = None
-    for word in words:
-        node = LinkedListNode(word)
-        if head is None:
-            head = node
-            current = node
-        else:
-            current.next = node
-            current = node
-    return head
 
 def get_all_frequencies(word_freq):
     """Return all word frequencies as a dictionary."""
@@ -68,16 +48,11 @@ def search_word_frequency(word_freq, word):
     return word_freq.get(word, 0)
 
 def process_text(text, stop_words):
-    """Process the text to calculate word frequencies and create a linked list."""
+    """Process the text to calculate word frequencies using a Python dictionary."""
     text = preprocess_text(text)
     text = filter_stop_words(text, stop_words)
     word_freq = calculate_word_frequencies(text)
-    
-    words = text.split()
-    linked_list_head = create_linked_list(words)
-    
-    return word_freq, linked_list_head
-
+    return word_freq
 
 if len(sys.argv) > 1:
     # Read text from the file provided as a command-line argument
@@ -86,14 +61,14 @@ if len(sys.argv) > 1:
 else:
     # Prompt the user to enter text
     text = input("Enter text: ")
+
 stop_words = set(["the", "a", "is", "in", "it", "of", "and", "to", "with", "that", "as", "for", "on", "at", "by", "an"])
 
 # Process the text
-
 start_time = time.time()
-word_freq, linked_list_head = process_text(text, stop_words)
-end_time = time.time()
-print(f"Text processed in {end_time - start_time:.4f} seconds.")
+word_freq = process_text(text, stop_words)
+end_time = time.time()  
+print(f"Processing time: {end_time - start_time:.4f} seconds")
 
 # Output options
 print("Choose an option:")
